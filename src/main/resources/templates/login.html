@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Login</title>
+  <script defer src="/auth.js"></script>
+  <meta name="csrf-token" content="CSRF_TOKEN_WERT"> <!-- CSRF-Token -->
+</head>
+<body>
+<div class="container mt-5">
+  <h1>Login</h1>
+  <form id="loginForm">
+    <div class="mb-3">
+      <label for="email" class="form-label">E-Mail</label>
+      <input type="email" class="form-control" id="email" required>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Passwort</label>
+      <input type="password" class="form-control" id="password" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Einloggen</button>
+    <span id="loadingSpinner" style="display: none;">Loading...</span>
+  </form>
+</div>
+<script>
+  document.getElementById("loginForm").addEventListener("submit", async function (event) {
+    event.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    const submitButton = document.querySelector('button[type="submit"]');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    submitButton.disabled = true;
+    loadingSpinner.style.display = 'inline';
+
+    try {
+      const response = await fetch('/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'CSRF-Token': csrfToken,
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        document.cookie = `jwtToken=${data.token}; Secure; HttpOnly`;
+        alert('Login erfolgreich!');
+        window.location.href = '/protectedPage.html';
+      } else if (response.status === 401) {
+        alert('Ungültige Anmeldedaten.');
+      } else {
+        alert('Serverfehler. Bitte später erneut versuchen.');
+      }
+    } catch (error) {
+      console.error('Fehler beim Login:', error);
+      alert('Ein Fehler ist aufgetreten.');
+    } finally {
+      submitButton.disabled = false;
+      loadingSpinner.style.display = 'none';
+    }
+  });
+</script>
+</body>
+</html>
