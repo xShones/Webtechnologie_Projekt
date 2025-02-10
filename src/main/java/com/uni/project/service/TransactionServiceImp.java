@@ -52,22 +52,15 @@ public class TransactionServiceImp implements TransactionService {
     }
 
     @Override
-    public Transaction getTransactionById(Long transacationId) {
-        List<Transaction> transactions = transactionRepository.findById(transacationId)
-        return transactions.stream().map(transaction -> { TransactionDTO dto= new TransactionDTO();
-            dto.setId(transaction.getId());
-            dto.setAmount(transaction.getAmount());
-            dto.setDate(transaction.getDate());
-            dto.setType(transaction.getType());
-            //zugriff auf Kategorie und setzen des Kategories-Name
-            if (transaction.getCategory() != null){
-                dto.setCategoryName(transaction.getCategory().getName());
-            }
-            else {
-                dto.setCategoryName("Uncategorized"); //Fallback, falls keine Kategorie vorhanden ist
-            }
-            return dto;}).collect(Collectors.toList());
+    public Transaction getTransactionById(Long id) {
+        return null;
     }
+
+//    @Override
+//    public Transaction getTransactionById(Long transacationId) {
+//        List<Transaction> transactions = transactionRepository.findById(transacationId)
+//
+//    }
 
     @Override
     public Transaction createTransaction(Transaction transaction) {
