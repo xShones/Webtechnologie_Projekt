@@ -47,7 +47,6 @@ public class JwtAuthenticationCookieFilter extends OncePerRequestFilter {
             userEmail = jwtService.extractUserName(jwt);
         }
 
-        System.out.println("userEmail: " + userEmail);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 

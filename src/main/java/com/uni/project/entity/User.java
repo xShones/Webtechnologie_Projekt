@@ -19,11 +19,14 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "username", nullable = false)
-    private String username;
+
+    @Column(name = "accountname", nullable = false)
+    private String accountName;
+
   //  @JsonIgnore // Verhindert die Serialisierung
     @Column(name = "password")
     private String password;
+
     @Column(name = "email", unique = true)
     private String email;
 
@@ -52,6 +55,10 @@ public class User implements UserDetails {
         return password;
     }
 
+    public String getAccountName() {
+        return accountName;
+    }
+
     @Override
     public String getUsername() {
         return email;
@@ -74,8 +81,8 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public void setUsername(String username) {
-        this.email = username;
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 
     public void setPassword(String password) {

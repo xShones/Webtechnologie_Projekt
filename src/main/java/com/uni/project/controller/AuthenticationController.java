@@ -24,7 +24,7 @@ public class AuthenticationController {
     @ResponseStatus(HttpStatus.OK)
     public String register(@RequestBody UserRegistrationDTO registerDto, HttpServletResponse response) {
         User userToRegister = User.builder()
-                .username(registerDto.getUsername())
+                .accountName(registerDto.getAccountName())
                 .email(registerDto.getEmail())
                 .password(registerDto.getPassword())
                 .build();

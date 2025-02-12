@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,7 +29,7 @@ public class UserServiceImp implements UserService {
 //        return userRepository.save(user);
 //    }
     private void validateUser(String username, String email) {
-        if (userRepository.existsByUsername(username)) {
+        if (userRepository.existsByAccountName(username)) {
             throw new IllegalArgumentException("Der Benutzername ist bereits vergeben.");
         }
         if (userRepository.existsByEmail(email)) {
@@ -40,7 +39,7 @@ public class UserServiceImp implements UserService {
 
     // Search for users by username
     public Optional<User> findUserByUsername(String username){
-        return userRepository.findByUsername(username);
+        return userRepository.findByAccountName(username);
     }
 
     // Search for users by email (e.g. for password recovery)
@@ -83,7 +82,7 @@ public class UserServiceImp implements UserService {
     public User updateUser(Long userId, User user) {
         User userObj= userRepository.findById(userId).get();
         if(userObj !=null){
-            userObj.setUsername(user.getUsername());
+            userObj.setAccountName(user.getAccountName());
             userObj.setEmail(user.getEmail());
             userObj.setPassword(user.getPassword());
         }
