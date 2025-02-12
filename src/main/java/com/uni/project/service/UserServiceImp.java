@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class UserServiceImp implements UserService {
@@ -22,11 +24,11 @@ public class UserServiceImp implements UserService {
     }
 
     //User registration
-    public User registerUser(String username, String email, String password) {
-        validateUser(username, email); // Verschobene Logik
-        User user = new User(username, email, password);
-        return userRepository.save(user);
-    }
+//    public User registerUser(String username, String email, String password) {
+//        validateUser(username, email); // Verschobene Logik
+//        User user = new User(username, email, password);
+//        return userRepository.save(user);
+//    }
     private void validateUser(String username, String email) {
         if (userRepository.existsByUsername(username)) {
             throw new IllegalArgumentException("Der Benutzername ist bereits vergeben.");
@@ -43,12 +45,14 @@ public class UserServiceImp implements UserService {
 
     // Search for users by email (e.g. for password recovery)
     public Optional<User> findUserByEmail(String email){
-        return userRepository.findByEmail(email);
+        return userRepository.findUserByEmail(email);
     }
 
     @Override
     public List<User> getAllUsers() {
-        List<User> userObj = userRepository.findAll();
+        List<User> userObj = StreamSupport
+                .stream(userRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
         if (userObj.isEmpty()){
             throw new NoUsersFoundException("Keine Benutzer gefunden.");
         }
@@ -63,6 +67,11 @@ public class UserServiceImp implements UserService {
                 orElseThrow(() -> new IllegalArgumentException("Benutzer mit ID " + userId + " nicht gefunden."));
     }
 
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new NoUsersFoundException("Keine Benutzer gefunden."));
+    }
 
     @Override
     public User createUser(User user) {
