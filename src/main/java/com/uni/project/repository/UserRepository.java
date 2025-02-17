@@ -1,15 +1,19 @@
 package com.uni.project.repository;
 
 import com.uni.project.entity.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByUsername(String username);
+@Repository
+public interface UserRepository extends CrudRepository<User, Long> {
+
+    Optional<User> findByAccountName(String accountName);
 
     boolean existsByEmail(String email);
-    boolean existsByUsername(String username);
-    Optional<User> findByEmail(String email);
-}
 
+    boolean existsByAccountName(String accountName);
+
+    Optional<User> findUserByEmail(String email);
+}

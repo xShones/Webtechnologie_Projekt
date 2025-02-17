@@ -11,3 +11,6 @@ public class ProjectApplication {
 	}
 
 }
+
+
+// ToDo: Die Packages sollen plural sein Bsp.: repository --> repositories... Bitte Refactoren

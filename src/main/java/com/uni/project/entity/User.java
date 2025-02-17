@@ -1,59 +1,92 @@
 package com.uni.project.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-@Setter
-@Getter
+import java.util.Collection;
+import java.util.Collections;
+
+
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "username", nullable = false)
-    private String username;
+
+    @Column(name = "accountname", nullable = false)
+    private String accountName;
+
   //  @JsonIgnore // Verhindert die Serialisierung
     @Column(name = "password")
     private String password;
+
     @Column(name = "email", unique = true)
     private String email;
 
-    public User() {}
-    public User(String username, String email, String password) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singleton(new SimpleGrantedAuthority("USER"));
     }
 
     public Long getId() {
         return id;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public void setEmail(String email) {
