@@ -35,6 +35,8 @@ public class SecurityFilterConfig {
                         .permitAll()
                         .requestMatchers("/auth/login")
                         .permitAll()
+                        .requestMatchers("/")
+                        .permitAll()
                         .anyRequest()
                         .authenticated()
                 )

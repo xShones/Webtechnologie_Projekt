@@ -47,7 +47,7 @@ public class TransactionController {
         "id": 4
     }
     }*/
-    @PostMapping("/new")
+    @PostMapping
     public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction) {
         Transaction savedTransaction = transactionService.createTransaction(transaction);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedTransaction);
